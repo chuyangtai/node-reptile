@@ -7,7 +7,7 @@ const request=require('request');
 var getLoginCookie = require('../public/javascripts/getLoginCookie');
 const url= require('../public/javascripts/config').url;
 var session = require('express-session');
-
+var mysql_common = require('../public/javascripts/mysql-common');
 
 // 浏览器请求报文头部部分信息
 var browserMsg={
@@ -48,12 +48,16 @@ function getData(cookie) {
 router.get("/",function(req,resp){
     if(req.session && req.session.cookieData){
         getData(req.session.cookieData).then(function (data) {
+            let addParam = ['healthRecords', JSON.stringify(data)];
+            mysql_common.addData(addParam);
             resp.send(data)
         });
     }else {
         getLoginCookie('黄军平', 'HJPmain').then(function (cookie) {
             req.session.cookieData=cookie;
             getData(cookie).then(function (data) {
+                let addParam = ['healthRecords', JSON.stringify(data)];
+                mysql_common.addData(addParam);
                 resp.send(data)
             });
         });

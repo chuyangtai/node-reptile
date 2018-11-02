@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
-
+var mysql_common = require('./public/javascripts/mysql-common');
 var indexRouter = require('./routes/index');
 var dataDispaly = require('./routes/data-display');
 var dataLists = require('./routes/jzxx-list');
@@ -14,16 +14,16 @@ var signStatistics = require('./routes/sign-statistics');
 var arrearageStatistics = require('./routes/arrearage-statistics');
 var paymentStatistics = require('./routes/payment-statistics');
 var adminDaily = require('./routes/admin-daily');
-var healthRecords= require('./routes/health-records');
+var healthRecords = require('./routes/health-records');
 
 var app = express();
 //跨域问题
-app.all('*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-    res.header("X-Powered-By",' 3.2.1');
-    next();
+app.all('*', function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+  res.header("X-Powered-By", ' 3.2.1');
+  next();
 });
 
 // view engine setup
@@ -38,9 +38,96 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //30分钟保持session
 app.use(session(
-    {secret: 'keyboard cat', resave: false, saveUninitialized: true, cookie: {maxAge: 1800000}}
+  { secret: 'keyboard cat', resave: false, saveUninitialized: true, cookie: { maxAge: 1800000 } }
 ));
-
+//console.log(req.baseUrl); // '/admin'
+//console.log(req.path); // '/new'
+//数据库有数据 则抽取数据库数据
+app.use('/', function (req, res, next) {
+  let methodName = req.originalUrl; // '/admin/new'
+  var sql = 'select t.datavalue from static_data t where t.datakey=? and TO_DAYS(NOW()) - TO_DAYS(intime) <= ?';
+  if (methodName && methodName == '/registerPerYear') {
+    let queryParam = ['registerPerYear', '30'];
+    mysql_common.queryData(sql, queryParam, function (err, vals, feild) {
+      if(err){
+        console.log(err);
+        next();
+      }
+      if (vals.length>0&&vals[0].datavalue) {
+        res.send(vals[0].datavalue);
+      } else {
+        next();
+      }
+    });
+  } else if (methodName && methodName == '/signStatistics') {
+    let queryParam = ['signStatistics', '30'];
+    mysql_common.queryData(sql, queryParam, function (err, vals, feild) {
+      if(err){
+        console.log(err);
+        next();
+      }
+      if (vals.length>0&&vals[0].datavalue) {
+        res.send(vals[0].datavalue);
+      } else {
+        next();
+      }
+    });
+  } else if (methodName && methodName == '/arrearageStatistics') {
+    let queryParam = ['arrearageStatistics', '30'];
+    mysql_common.queryData(sql, queryParam, function (err, vals, feild) {
+      if(err){
+        console.log(err);
+        next();
+      }
+      if (vals.length>0&&vals[0].datavalue) {
+        res.send(vals[0].datavalue);
+      } else {
+        next();
+      }
+    });
+  } else if (methodName && methodName == '/paymentStatistics') {
+    let queryParam = ['paymentStatistics', '30'];
+    mysql_common.queryData(sql, queryParam, function (err, vals, feild) {
+      if(err){
+        console.log(err);
+        next();
+      }
+      if (vals.length>0&&vals[0].datavalue) {
+        res.send(vals[0].datavalue);
+      } else {
+        next();
+      }
+    });
+  } else if (methodName && methodName == '/adminDaily') {
+    let queryParam = ['adminDaily', '1'];
+    mysql_common.queryData(sql, queryParam, function (err, vals, feild) {
+      if(err){
+        console.log(err);
+        next();
+      }
+      if (vals.length>0&&vals[0].datavalue) {
+        res.send(vals[0].datavalue);
+      } else {
+        next();
+      }
+    });
+  } else if (methodName && methodName == '/healthRecords') {
+    let queryParam = ['healthRecords', '30'];
+    mysql_common.queryData(sql, queryParam, function (err, vals, feild) {
+      if(err){
+        console.log(err);
+        next();
+      }
+      if (vals.length>0&&vals[0].datavalue) {
+        res.send(vals[0].datavalue);
+      } else {
+        next();
+      }
+    });
+  } else {
+    next();
+  }
+});
 app.use('/', indexRouter);
 app.use('/dataDispaly', dataDispaly);
 app.use('/dataLists', dataLists);
@@ -53,12 +140,12 @@ app.use('/adminDaily', adminDaily);
 app.use('/healthRecords', healthRecords);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -68,4 +155,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+process.on('uncaughtException', function (err) {
+    console.log('Caught exception: ' + err);
+    console.log('Caught exception: ' + err.stack);
+});
 module.exports = app;

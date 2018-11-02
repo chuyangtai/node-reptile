@@ -7,7 +7,7 @@ const request=require('request');
 var getLoginCookie = require('../public/javascripts/getLoginCookie');
 const url= require('../public/javascripts/config').url;
 var session = require('express-session');
-
+var mysql_common = require('../public/javascripts/mysql-common');
 // 浏览器请求报文头部部分信息
 var browserMsg={
     "User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36",
@@ -27,6 +27,7 @@ function getData(cookie) {
     return new Promise(function(resolve, reject) {
         //传入cookie
         superagent.post(url+'/ReportChat/GetHZList').set("Cookie",cookie).set(browserMsg).send(param).end(function(err,res) {
+            //console.log(JSON.parse(JSON.parse(res.text).Info).data)
             var datas = JSON.parse(JSON.parse(JSON.parse(res.text).Info).data);
             var arr=[];
             datas.forEach(function (item,i) {
@@ -55,31 +56,37 @@ function getData(cookie) {
             });
             //日报,前一天的日报
             var param2={
-                'startDate':d.getFullYear()+'-'+(d.getMonth()+1)+'-'+(d.getDate()-1),
-                'endDate':d.getFullYear()+'-'+(d.getMonth()+1)+'-'+(d.getDate()-1),
                 'orgCode': '0',
                 'hosType': '0',
-                'mzType': '1'
+                'mzType': '1',
+                'startDate': d.getFullYear()+'-'+(d.getMonth()+1)+'-'+(d.getDate()-1),
+                'endDate': d.getFullYear()+'-'+(d.getMonth()+1)+'-'+(d.getDate()-1),
             };
-            //console.log(param2);
+            console.log(param2);
 
             superagent.post(url+'/Report/DailyService').set("Cookie",cookie).set(browserMsg).send(param2).end(function(err,res) {
+                console.log(res.text)
                 var datas=JSON.parse(JSON.parse(JSON.parse(res.text).Info).data);
                 var arr2= {
                     medicalNum: [],
                     medicalFee: [],
                     medicalRatio:{
                         xAxis:{},
-                        source:{}
+                        source:[]
                     }
-                }
+                };
+                console.log(datas)
                 datas.forEach(function (item) {
+                    console.log(item.zzjgmc)
                     arr2.medicalNum.push({'orgName':item.zzjgmc,'jzrc':Number(item.jzrc),'ybmzNumRatio':(Number(item.ybmzrc)/Number(item.jzrc)*100).toFixed(2),'zfmNumRatio':(Number(item.zfmzrc)/Number(item.jzrc)*100).toFixed(2),'xkbNumRatio':(Number(item.xkbmzrc)/Number(item.jzrc)*100).toFixed(2)});
                     arr2.medicalFee.push({'orgName':item.zzjgmc,'jzFee':Number(item.jzzfy)/10000,'jcFee':(Number(item.jzzfy)/Number(item.jzrc)).toFixed(2),'ybbxFeeRatio':(Number(item.ybbxfy)/Number(item.jzzfy)*100).toFixed(2),'ybzfFeeRatio':(Number(item.ybzffy)/Number(item.jzzfy)*100).toFixed(2)});
                 });
                 superagent.post(url+'/ReportChat/AreaTreatment').set("Cookie",cookie).set(browserMsg).send({'cmd': 'medicalservice'}).end(function(err,res) {
                     arr2.medicalRatio.xAxis=JSON.parse(JSON.parse(JSON.parse(res.text).Info).hospitalName);
-                    arr2.medicalRatio.source=JSON.parse(JSON.parse(JSON.parse(res.text).Info).datas)[5].DataList;
+                    var datas=JSON.parse(JSON.parse(JSON.parse(res.text).Info).datas);
+                    datas.forEach(function (item) {
+                        arr2.medicalRatio.source.push(item.DataList[7]);
+                    });
                     resolve({
                         'dailyReport':arr2,
                         'monthlyReport': arr
@@ -95,12 +102,16 @@ function getData(cookie) {
 router.get("/",function(req,resp){
     if(req.session && req.session.cookieData){
         getData(req.session.cookieData).then(function (data) {
+            let addParam = ['adminDaily', JSON.stringify(data)];
+            mysql_common.addData(addParam);
             resp.send(data)
         });
     }else {
         getLoginCookie('黄军平', 'HJPmain').then(function (cookie) {
             req.session.cookieData=cookie;
             getData(cookie).then(function (data) {
+               let addParam = ['adminDaily', JSON.stringify(data)];
+                mysql_common.addData(addParam);
                 resp.send(data)
             });
         });

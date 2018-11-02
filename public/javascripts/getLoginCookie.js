@@ -19,7 +19,7 @@ function getLoginCookie(user, pwd,url) {
             }else {
                 //获取cookie
                 var cookie = response.headers["set-cookie"];
-                console.log(cookie+111)
+                //console.log(cookie+111)
                 resolve(cookie);
             }
 
