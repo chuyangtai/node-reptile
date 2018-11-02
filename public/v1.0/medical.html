@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <title>医政管理</title>
+    <link rel="stylesheet" href="content/app.css">
+    <script src="js/vue.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <div class="page medical-page" id="medical-page">
+    <div class="menu">
+            <div class="btn trigger">
+                <span class="line"></span>
+            </div>
+            <div class="icons">
+                <div class="rotater">
+                    <div class="btn btn-icon">
+                        <a href="index.html" class="fa flex flex-center">首页</a>
+                    </div>
+                </div>
+                <div class="rotater">
+                    <div class="btn btn-icon">
+                        <a href="user.html" class="fa  flex flex-center">用户<br>分析</a>
+                    </div>
+                </div>
+                <div class="rotater">
+                    <div class="btn btn-icon">
+                        <a href="medical.html" class="fa  flex flex-center">医政<br>管理</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nav flex justify-around">
+            <a href="user.html">用户分析统计</a>
+            <a class="active" href="medical.html">医政管理综合统计</a>
+        </div>
+        <div class="content">
+            <div class="card-initial">
+                <p class="title">欠费分析（年度）</p>
+                <ul class="list-block">
+                    <li class="flex justify-between">
+                        <span>总金额</span>
+                        <span v-cloak>{{arrearage.totle}}元</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>欠费金额</span>
+                        <span v-cloak>{{arrearage.totleArrearage}}元</span>
+                    </li>
+                </ul>
+                <p class="title mt20">月欠费统计</p>
+                <div class="bar" id="monthBar"></div>
+                <p class="title mt20">欠费分布分析</p>
+                <bar-tab :order="1"></bar-tab>
+                <div class="bar" id="distributionBar"></div>
+                <div style="display:none;" class="bar" id="distributionPe"></div>
+            </div>
+            <div class="card-initial">
+                <p class="title">支付统计</p>
+                <bar-tab :be="payCount" :list="{bar:'支付途径', pie:'医院统计'}" ></bar-tab>
+                <!-- <div class="bar-tab">
+                    <span class="active">支付途径</span>
+                    <span>医院统计</span>
+                </div> -->
+                <div class="payCount">
+                    <div class="flex justify-between mt20 sign">
+                        <div>
+                            <p>交易总笔数</p>
+                            <p class="c333">{{payChannel.totleNum}}笔</p>
+                        </div>
+                        <div>
+                            <p>总额合计</p>
+                            <p class="c333">{{payChannel.totleAmount}}元</p>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>支付途径</th>
+                                    <th>交易笔数</th>
+                                    <th>总额(元)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in payChannel.datas">
+                                    <td width="50%" align="left">{{item.name}}</td>
+                                    <td>{{item.payNum}}</td>
+                                    <td>{{item.payAmount}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="payCount" style="display:none;">
+                    <!-- <div class="flex justify-between mt20 sign">
+                        <div>
+                            <p>交易总笔数</p>
+                            <p class="c333">1707笔</p>
+                        </div>
+                        <div>
+                            <p>第三方支付总额</p>
+                            <p class="c333">123456.78元</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between mt20 sign">
+                        <div>
+                            <p>社保支付总额</p>
+                            <p class="c333">1707笔</p>
+                        </div>
+                        <div>
+                            <p>总额合计</p>
+                            <p class="c333">123456.78元</p>
+                        </div>
+                    </div> -->
+                    <div class="flex justify-between mt20 sign">
+                        <div>
+                            <p>交易总笔数</p>
+                            <p class="c333">{{payChannel.totleNum}}笔</p>
+                        </div>
+                        <div>
+                            <p>总额合计</p>
+                            <p class="c333">{{payChannel.totleAmount}}元</p>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>签约单位</th>
+                                    <th>交易笔数</th>
+                                    <th>第三方支付(元)</th>
+                                    <th>社保支付(元)</th>
+                                    <th>总额(元)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in hosChannel">
+                                    <td align="left">{{item.orgName}}</td>
+                                    <td width="20%">{{item.payNum}}</td>
+                                    <td width="20%">{{item.thirdPay}}</td>
+                                    <td>{{item.sbPay}}</td>
+                                    <td>{{item.totlePay}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-initial">
+                <p class="title">医政服务日报</p>
+                <!-- <div class="bar-tab">
+                    <span class="active">就诊人次</span>
+                    <span>就诊费用</span>
+                </div> -->
+                <bar-tab :list="{bar:'就诊人次', pie:'就诊费用'}" :be="daily"></bar-tab>
+                <div class="table daily">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>就诊单位</th>
+                                <th>就诊人次</th>
+                                <th>医保门诊人次占比</th>
+                                <th>自费门诊人次占比</th>
+                                <th>先看病后付费人次占比</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in medicalNum">
+                                <td align="left">{{item.orgName}}</td>
+                                <td width="20%">{{item.jzrc}}</td>
+                                <td>{{item.ybmzNumRatio}}%</td>
+                                <td>{{item.zfmNumRatio}}%</td>
+                                <td>{{item.xkbNumRatio}}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table daily" style="display:none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>就诊单位</th>
+                                <th>就诊费用(万元)</th>
+                                <th>均次费用(元)</th>
+                                <th>医保报销费用比</th>
+                                <th>医保自费费用比</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in medicalFee">
+                                <td align="left">{{item.orgName}}</td>
+                                <td>{{item.jzFee.toFixed(2)}}</td>
+                                <td width="20%">{{item.jcFee}}%</td>
+                                <td width="20%">{{item.ybbxFeeRatio}}%</td>
+                                <td width="20%">{{item.ybzfFeeRatio}}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="title">占比统计</p>
+                <!-- <div class="bar-tab">
+                    <span class="active">药占比</span>
+                    <span>基药比</span>
+                    <span>输液比</span>
+                    <span>抗生素比</span>
+                </div> -->
+                <bar-tab :order="3" :list="{YPZEData:'药占比', ZBYWData:'基药比', SYCFZRCData:'输液比', KSSCFZRCData:'抗生素比'}"></bar-tab>
+                <div class="bar" id="YPZEData"></div>
+                <!-- <div style="display:none;" class="bar" id="jyb"></div>
+                <div style="display:none;" class="bar" id="syb"></div>
+                <div style="display:none;" class="bar" id="kssb"></div> -->
+            </div>
+            <div class="card-initial">
+                <p class="title">医政报表月汇总</p>
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>服务指标</th>
+                                <th>总计</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in monthlyReport">
+                                <td>{{item.name}}</td>
+                                <td>{{item.ItemNum}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <div>
+                            点击查看更多&or;
+                    </div> -->
+                </div>
+            </div>
+            <div class="card-initial">
+                <p class="title">健康档案调阅统计</p>
+                <div class="flex justify-between mt20 sign">
+                    <div>
+                        <p>总就诊次数</p>
+                        <p class="c333">{{health.Total_Num}}人</p>
+                    </div>
+                    <div>
+                        <p>健康档案调阅总次数</p>
+                        <p class="c333">{{health.InvokePHR_Num}}</p>
+                    </div>
+                </div>
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>就诊单位</th>
+                                <th>就诊次数</th>
+                                <th>健康档案调阅次数</th>
+                                <th>调阅率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in health.datas">
+                                <td align="left">{{item.ZZJGMC}}</td>
+                                <td>{{item.Total_Num}}</td>
+                                <td>{{item.InvokePHR_Num}}</td>
+                                <td width="20%">{{item.InvokePHR_Rate}}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="js/echarts.min.js"></script>
+<script src="js/lodash.min.js"></script>
+<script src="js/axios.min.js"></script>
+<script src="js/medical.js"></script>
+<script>
+    $(".trigger").click(function () {
+        $(".menu").toggleClass("active");
+    });
+</script>
+</body>
+
+</html>

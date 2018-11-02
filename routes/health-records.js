@@ -7,7 +7,7 @@ const request=require('request');
 var getLoginCookie = require('../public/javascripts/getLoginCookie');
 const url= require('../public/javascripts/config').url;
 var session = require('express-session');
-var mysql_common = require('../public/javascripts/mysql-common');
+var mysql_common = require('./common/mysql-common');
 
 // 浏览器请求报文头部部分信息
 var browserMsg={

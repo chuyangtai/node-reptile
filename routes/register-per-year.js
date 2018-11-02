@@ -7,7 +7,7 @@ const request = require('request');
 var getLoginCookie = require('../public/javascripts/getLoginCookie');
 const url = require('../public/javascripts/config').url;
 var session = require('express-session');
-var mysql_common = require('../public/javascripts/mysql-common');
+var mysql_common = require('./common/mysql-common');
 var browserMsg = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36",
     'Content-Type': 'application/x-www-form-urlencoded'

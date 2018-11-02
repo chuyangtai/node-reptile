@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <title>用户分析</title>
+    <link rel="stylesheet" href="content/app.css">
+    <script src="js/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="page user-page" id="user-page">
+        <div class="menu">
+            <div class="btn trigger">
+                <span class="line"></span>
+            </div>
+            <div class="icons">
+                <div class="rotater">
+                    <div class="btn btn-icon">
+                        <a href="index.html" class="fa flex flex-center">首页</a>
+                    </div>
+                </div>
+                <div class="rotater">
+                    <div class="btn btn-icon">
+                        <a href="user.html" class="fa  flex flex-center">用户<br>分析</a>
+                    </div>
+                </div>
+                <div class="rotater">
+                    <div class="btn btn-icon">
+                        <a href="medical.html" class="fa  flex flex-center">医政<br>管理</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nav flex justify-around">
+            <a class="active" href="user.html">用户分析统计</a>
+            <a href="medical.html">医政管理综合统计</a>
+        </div>
+        <div class="content">
+            <div class="card-initial">
+                <p class="title">预约挂号统计</p>
+                <div class="bar" id="register"></div>
+                <p class="title mt20">预约挂号人群年龄段分析</p>
+                <bar-tab :order="1"></bar-tab>
+                <!-- <div class="bar-tab">
+                    <span class="active">统计</span>
+                    <span>占比</span>
+                </div> -->
+                <!-- <div v-if="typeName == 'ageCount'" class="bar" id="ageCount"></div>
+                <div v-if="typeName == 'agePe'" class="bar" id="agePe"></div> -->
+                <div class="bar" id="ageCount"></div>
+                <div style="display:none;" class="bar" id="agePe"></div>
+                <p class="title mt20">预约挂号按时就诊情况分析</p>
+                <bar-tab :order="3"></bar-tab>
+                <!-- <div class="bar-tab">
+                    <span class="active">统计</span>
+                    <span>占比</span>
+                </div> -->
+                <div class="bar" id="visitCount"></div>
+                <div style="display:none;" class="bar" id="visitPe"></div>
+                <div style="display:none;" class="bar" id="visitPe"></div>
+                <div style="display:none;" class="bar" id="visitPe"></div>
+            </div>
+            <div class="card-initial">
+                <p class="title">信用就医签约统计</p>
+                <div class="flex justify-between mt20">
+                    <span>签约总人数</span>
+                    <span class="c333">{{sign.totalSign}}人</span>
+                </div>
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>签约单位</th>
+                                <th>签约人数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in sign.signData">
+                                <td width="50%">{{item.OrgName}}</td>
+                                <td>{{item.SingNum}}</td>
+                            </tr>
+                            <!-- <tr>
+                                <td>富阳区卫生系统</td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>富阳区卫生系统</td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>富阳区卫生系统</td>
+                                <td>5</td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-initial">
+                <p class="title">家庭医生签约统计</p>
+                <div class="flex justify-between mt20 sign">
+                    <div>
+                        <p>签约总人数</p>
+                        <p class="c333">{{family.totalSign}}人</p>
+                    </div>
+                    <div>
+                        <p>续签率</p>
+                        <p class="c333">{{family.totalPercent}}%</p>
+                    </div>
+                </div>
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>签约类型</th>
+                                <th>签约人数</th>
+                                <th>续签率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in family.signData">
+                                <td width="50%" align="left">{{item.OrgName}}</td>
+                                <td>{{item.SingNum}}</td>
+                                <td>{{item.SingPercent}}%</td>
+                            </tr>
+                            <!-- <tr>
+                                <td width="50%" align="left">一般人群</td>
+                                <td>4564</td>
+                                <td>29.75%</td>
+                            </tr>
+                            <tr>
+                                <td width="50%" align="left">慢性病—高血压</td>
+                                <td>4564</td>
+                                <td>29.75%</td>
+                            </tr>
+                            <tr>
+                                <td width="50%" align="left">一般人群</td>
+                                <td>4564</td>
+                                <td>29.75%</td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-initial">
+                <p class="title">检查检验调阅次数统计</p>
+                <div class="bar" id="check"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/vue.min.js"></script>
+<script src="js/echarts.min.js"></script>
+<script src="js/axios.min.js"></script>
+<script src="js/lodash.min.js"></script>
+<script src="js/user.js"></script>
+<script>
+        $(".trigger").click(function () {
+            $(".menu").toggleClass("active");
+        });
+    </script>
+</html>
