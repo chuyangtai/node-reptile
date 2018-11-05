@@ -90,7 +90,13 @@ function getData(cookie) {
                         var tdItem=$(trItem).find('td');
                        attr2.push({'orgName':tdItem.eq(0).text(),'payNum':tdItem.eq(1).text(),'thirdPay':tdItem.eq(2).text(),'sbPay':tdItem.eq(3).text(),'totlePay':tdItem.eq(4).text()})
                     }
+                });
+                /*总计*/
+                var totleNum=0,totleAmount=0;
 
+                attr.payChannel.datas.forEach(function (item) {
+                    attr.payChannel.totleNum+=Number(item.payNum);
+                    attr.payChannel.totleAmount+=Number(item.payAmount);
                 });
                 resolve({
                     'payChannel': attr.payChannel,

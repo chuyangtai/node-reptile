@@ -45,7 +45,7 @@ app.use(session(
 //数据库有数据 则抽取数据库数据
 app.use('/', function (req, res, next) {
   let methodName = req.originalUrl; // '/admin/new'
-  var sql = 'select t.datavalue from static_data t where t.datakey=? and TO_DAYS(NOW()) - TO_DAYS(intime) <= ?';
+  var sql = 'select t.datavalue,t.intime from static_data t  where  t.datakey=? and TO_DAYS(NOW()) - TO_DAYS(intime) <=? ORDER BY t.intime desc limit 1';
   if (methodName && methodName == '/registerPerYear') {
     let queryParam = ['registerPerYear', '30'];
     mysql_common.queryData(sql, queryParam, function (err, vals, feild) {

@@ -41,9 +41,9 @@
         let _base = {
             color: ['#3398DB'],
             grid: {
-                left: 0,
+                left: '5%',
                 right: '5%',
-                top: '20%',
+                top: '10%',
                 bottom: 0,
                 containLabel: true
             },
@@ -57,6 +57,12 @@
         switch (opt.type) {
             case 'bar':
                 _custom = {
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {
+                            type : 'shadow'
+                        }
+                    },
                     xAxis: {
                         type: 'category',
                         axisLine: {
@@ -87,13 +93,12 @@
                         }
                     },
                     series : {
-                        name:'直接访问',
                         type:'bar',
                         barWidth: '60%',
                         itemStyle: {
-                            color: function(params) { 
-                                var colorList = ['#EF8D36','#FCCD57','#49B35B','#0C8EE9', '#BDD259','#42BAD2', '#BDD259','#42BAD2' ]; 
-                                return colorList[params.dataIndex] 
+                            color: function(params) {
+                                var colorList = ['#EF8D36','#FCCD57','#49B35B','#0C8EE9', '#BDD259','#42BAD2', '#BDD259','#42BAD2' ];
+                                return colorList[params.dataIndex]
                             }
                         }
                     }
@@ -161,7 +166,7 @@
                     name: opt.name,
                     type: opt.type,
                     center: ['50%', '60%'],
-                    radius: ['40%', '80%'],
+                    radius: ['30%', '60%'],
                     label: {
                         normal: {
                             formatter: '{per|{d}%} {abg|}\n{hr|}\n  {b|{b}}    ',
@@ -190,7 +195,7 @@
                         }
                     }
                 },
-                color: ['#EF8D36','#FCCD57','#49B35B','#0C8EE9', '#BDD259','#42BAD2' ]       
+                color: ['#EF8D36','#FCCD57','#49B35B','#0C8EE9', '#BDD259','#42BAD2' ]
             };
             break;
         }
@@ -248,7 +253,7 @@
             baseOption: {},
             options: _options
         });
-        
+
         this.charts[chartIndex].setOption(this.options[chartIndex]);
     };
 
@@ -292,7 +297,7 @@
             },
             methods:{
                 change:function(index, key){
-                    this.number= index; 
+                    this.number= index;
                     if(this.order){
                         pf.setChartData(this.order, index, key)
                     }
@@ -313,7 +318,7 @@
             this.charts[order+index].resize();
         }
     }
-    
+
 
     window.Platforms = Platforms;
 }();
@@ -372,13 +377,13 @@
             console.log(error);
         });
     }
-    
+
     Platforms.prototype.render = function () {
         this.setChartInit();
         // this.arrearageStatistics();
     }
 
-   
+
 
     Platforms.prototype.getData = function () {
         this.setChartInit();
@@ -392,7 +397,7 @@
                     this.updateChart(o.id, response, i,);
                     this.charts[i].hideLoading();
                 }
-            });    
+            });
         });
         this.getMedical().then(response => {
             this.doms.forEach((o, i) => {
@@ -400,7 +405,7 @@
                     this.updateChart(o.id, response, i,);
                     this.charts[i].hideLoading();
                 }
-            });    
+            });
         });
 
         this.paymentStatistics();

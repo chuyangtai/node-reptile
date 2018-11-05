@@ -51,6 +51,12 @@
         switch (opt.type) {
             case 'bar':
                 _custom = {
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {            
+                            type : 'shadow'
+                        }
+                    },
                     xAxis: {
                         type: 'category',
                         axisLine: {
@@ -81,7 +87,6 @@
                         }
                     },
                     series : {
-                        name:'直接访问',
                         type:'bar',
                         barWidth: '60%',
                         itemStyle: {
@@ -155,7 +160,7 @@
                         name: opt.name,
                         type: opt.type,
                         center: ['50%', '60%'],
-                        radius: ['40%', '80%'],
+                        radius: ['30%', '60%'],
                         label: {
                             normal: {
                                 formatter: '{per|{d}%} {abg|}\n{hr|}\n  {b|{b}}    ',

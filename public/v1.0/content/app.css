@@ -177,7 +177,7 @@ a { text-decoration: none;}
 
 
 /*  */
-.bar{margin-top: .5rem; width: 100%; height: 9rem;}
+.bar{margin-top: .5rem; width: 100%; height: 10rem;}
 
 .bar-tab{display: flex; margin: 1rem auto 0 auto; width: min-content; height: 1.25rem; line-height: 1.25rem; color: #4C8FFF; border:1px solid rgba(76,143,255,1); border-radius: .725rem; overflow: hidden;}
 .bar-tab span{display: block; width: 3.75rem; height: 100%; border-right: 1px solid #4C8FFF; text-align: center;}
