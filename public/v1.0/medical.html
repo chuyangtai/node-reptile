@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
     <title>医政管理</title>
     <link rel="stylesheet" href="content/app.css">
+    <script src="js/warning.js"></script>
     <script src="js/vue.min.js"></script>
     <script src="js/jquery.min.js"></script>
 
@@ -44,11 +45,11 @@
                 <p class="title">欠费分析（年度）</p>
                 <ul class="list-block">
                     <li class="flex justify-between">
-                        <span>总金额</span>
+                        <span>费用总金额</span>
                         <span v-cloak>{{arrearage.totle}}元</span>
                     </li>
                     <li class="flex justify-between">
-                        <span>欠费金额</span>
+                        <span>欠费总金额</span>
                         <span v-cloak>{{arrearage.totleArrearage}}元</span>
                     </li>
                 </ul>
@@ -60,7 +61,7 @@
                 <div style="display:none;" class="bar" id="distributionPe"></div>
             </div>
             <div class="card-initial">
-                <p class="title">支付统计</p>
+                <p class="title">支付统计（年度）</p>
                 <bar-tab :be="payCount" :list="{bar:'支付途径', pie:'医院统计'}" ></bar-tab>
                 <!-- <div class="bar-tab">
                     <span class="active">支付途径</span>
@@ -239,7 +240,7 @@
                 </div>
             </div>
             <div class="card-initial">
-                <p class="title">健康档案调阅统计</p>
+                <p class="title">健康档案调阅统计（年度）</p>
                 <div class="flex justify-between mt20 sign">
                     <div>
                         <p>总就诊次数</p>

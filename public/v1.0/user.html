@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
     <title>用户分析</title>
     <link rel="stylesheet" href="content/app.css">
+    <script src="js/warning.js"></script>
     <script src="js/jquery.min.js"></script>
 </head>
 
@@ -39,7 +40,7 @@
         </div>
         <div class="content">
             <div class="card-initial">
-                <p class="title">预约挂号统计</p>
+                <p class="title">预约挂号统计（年度）</p>
                 <div class="bar" id="register"></div>
                 <p class="title mt20">预约挂号人群年龄段分析</p>
                 <bar-tab :order="1"></bar-tab>
@@ -63,7 +64,7 @@
                 <div style="display:none;" class="bar" id="visitPe"></div>
             </div>
             <div class="card-initial">
-                <p class="title">信用就医签约统计</p>
+                <p class="title">信用就医签约统计（年度）</p>
                 <div class="flex justify-between mt20">
                     <span>签约总人数</span>
                     <span class="c333">{{sign.totalSign}}人</span>
@@ -98,7 +99,7 @@
                 </div>
             </div>
             <div class="card-initial">
-                <p class="title">家庭医生签约统计</p>
+                <p class="title">家庭医生签约统计（年度）</p>
                 <div class="flex justify-between mt20 sign">
                     <div>
                         <p>签约总人数</p>
@@ -144,7 +145,7 @@
                 </div>
             </div>
             <div class="card-initial">
-                <p class="title">检查检验调阅次数统计</p>
+                <p class="title">检查检验调阅次数统计（年度）</p>
                 <div class="bar" id="check"></div>
             </div>
         </div>

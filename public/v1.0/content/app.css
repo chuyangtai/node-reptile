@@ -216,8 +216,8 @@ a { text-decoration: none;}
 .results-list ul li div:nth-child(3){background: #FEEDE8;}
 .results-list ul img{width: 1.75rem;}
 
-
-
+/* warning */
+.warning{margin-top: 2rem; text-align: center; font-size: .8rem;}
 
 
 

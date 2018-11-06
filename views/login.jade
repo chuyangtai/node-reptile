@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    div(class="loginPage")
+        h1= title
+        form(class="loginForm" action="/check" method="post")
+            div
+                input(type='text' name="check")
+            div
+                button 确 认
+        if password=='wrong'
+            div(class="error") 验证码输入错误
+
